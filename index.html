@@ -16,6 +16,7 @@
   --sub: #fffaf6;
   --accent: #b0896a; /* メインのアクセント色 */
   --text: #3a2e2a;
+  --header-logo-height: 2.0em; /* 編集してヘッダーロゴの高さを調整できます */
 }
 
 * {
@@ -92,25 +93,27 @@ header {
 /* =====================
    ナビ
 ===================== */
+/* animated slide-down nav */
 nav {
-  display: none;
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  width: 100%;
   background: var(--sub);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: max-height 360ms ease, opacity 260ms ease, transform 260ms ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
+nav.open { max-height: 420px; opacity: 1; transform: translateY(0); }
 
-nav ul {
-  list-style: none;
-}
+nav ul { list-style: none; margin: 8px 0 12px 0; }
 
-nav li {
-  border-bottom: 1px solid #eee;
-}
+nav li { border-bottom: 1px solid #eee; }
 
-nav a {
-  display: block;
-  padding: 14px 16px;
-  text-decoration: none;
-  color: var(--text);
-}
+nav a { display: block; padding: 14px 16px; text-decoration: none; color: var(--text); }
+
 
 /* =====================
    メイン
@@ -236,7 +239,7 @@ footer {
 .about-text { font-size:14px; color:#444; margin:0; }
 
 /* header logo */
-.header-logo { height:1em; width:auto; border-radius:4px; object-fit:cover; margin-right:8px; vertical-align:middle; display:inline-block; }
+.header-logo { height:var(--header-logo-height); width:auto; border-radius:4px; object-fit:cover; margin-right:8px; vertical-align:middle; display:inline-block; }
 .header-logo-wrap{display:inline-block}
 .header-logo-wrap .placeholder{display:none;color:var(--accent);font-size:12px;padding-left:6px}
 .header-logo-wrap.noimg .placeholder{display:inline-block}
@@ -274,7 +277,7 @@ footer .footer-wrap { display:flex; align-items:center; justify-content:center; 
 
 <header>
   <div class="header-inner">
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="hamburger" onclick="toggleMenu()" aria-expanded="false" role="button" tabindex="0">☰</div>
     <div class="header-logo-wrap">
       <!-- ユーザー指定のアイコンを相対パスで読み込み -->
       <img class="header-logo" src="image/アイコン.png" alt="米粉のしふぉん　まつぼっくり" onerror="this.style.display='none'; this.parentElement.classList.add('noimg')">
@@ -406,8 +409,17 @@ footer .footer-wrap { display:flex; align-items:center; justify-content:center; 
 // toggleMenu already present earlier
 function toggleMenu() {
   const nav = document.getElementById("nav");
-  nav.style.display = nav.style.display === "block" ? "none" : "block";
+  const hb = document.querySelector('.hamburger');
+  if (!nav) return;
+  const isOpen = nav.classList.toggle('open');
+  if (hb) hb.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
+// keyboard support for hamburger (Enter / Space)
+document.addEventListener('keydown', (e)=>{
+  const hb = document.querySelector('.hamburger');
+  if (!hb) return;
+  if (document.activeElement === hb && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggleMenu(); }
+});
 
 // --- Shop data loader ---
 async function loadShopData() {
