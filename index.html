@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<title>米粉のしふぉん まつぼっくり</title>
+
+<style>
+/* =====================
+   基本設定
+===================== */
+:root {
+  --main: #efe6db; /* 薄い茶色（淡いアクセント） */
+  --sub: #fffaf6;
+  --accent: #b0896a; /* メインのアクセント色 */
+  --text: #3a2e2a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+  background: #eaeaea;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* subtle paper texture */
+.device-frame::before {
+  content: "";
+  position: absolute; left:0; top:0; right:0; bottom:0;
+  background-image: radial-gradient(rgba(0,0,0,0.01) 1px, transparent 1px);
+  background-size: 14px 14px; pointer-events:none; opacity:0.55;
+}
+
+/* =====================
+   iPhone15サイズ固定
+===================== */
+.device-frame {
+  width: 393px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 0 24px rgba(0,0,0,0.18);
+}
+
+/* =====================
+   ヘッダー
+===================== */
+header {
+  position: fixed;
+  top: 0;
+  width: 393px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  z-index: 1000;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 16px;
+  position: relative;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.hamburger {
+  font-size: 22px;
+  cursor: pointer;
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1100;
+} 
+
+/* =====================
+   ナビ
+===================== */
+nav {
+  display: none;
+  background: var(--sub);
+}
+
+nav ul {
+  list-style: none;
+}
+
+nav li {
+  border-bottom: 1px solid #eee;
+}
+
+nav a {
+  display: block;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+/* =====================
+   メイン
+===================== */
+main {
+  padding-top: 68px;
+}
+
+section {
+  padding: 32px 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin-bottom: 16px;
+  border-left: 5px solid var(--main);
+  padding-left: 8px;
+}
+
+/* =====================
+   ヒーロー
+===================== */
+.hero {
+  background: var(--sub);
+  text-align: center;
+  padding: 52px 16px;
+}
+
+.hero h1 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 14px;
+}
+
+/* =====================
+   カード
+===================== */
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+/* =====================
+   メニュー
+===================== */
+.menu-list {
+  list-style: none;
+}
+
+.menu-list li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #ddd;
+  padding: 8px 0;
+}
+
+/* =====================
+   カレンダー
+===================== */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.calendar div {
+  padding: 8px 0 12px 0; /* 日付部分が見えやすいように下の余白を確保 */
+}
+
+.closed {
+  background: #ffe0e0;
+  border-radius: 4px;
+}
+
+/* 本日ハイライト */
+.today { outline: 2px solid var(--accent); border-radius:6px; }
+.today:not(.closed) { background:#fffaf0; }
+.closed.today { background:#ffe0e0; }
+
+/* シール（米粉パン）は右下に小さく表示し、日付を隠さない */
+.sticker { position: absolute; bottom:4px; right:4px; font-size:10px; background:var(--main); color:var(--text); padding:2px 6px; border-radius:8px; box-shadow:0 1px 0 rgba(0,0,0,0.05); z-index:1; }
+.date-num { display:block; position:relative; z-index:2; font-weight:700; } 
+
+/* =====================
+   フッター
+===================== */
+footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 26px 16px;
+  font-size: 12px;
+}
+
+/* =====================
+   ヒーローのレイアウトとボタン・メニュー
+===================== */
+.hero-inner { display:flex; flex-direction:column; gap:12px; align-items:center; }
+.hero-image img { width:100%; height:auto; object-fit:cover; border-radius:12px; }
+.slides{position:relative;width:100%;height:220px;border-radius:12px;overflow:hidden}
+.slides img.slide{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 600ms ease}
+.slides img.slide.active{opacity:1}
+.slides img.slide.hidden{display:none!important;opacity:0}
+.slides-placeholder{position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:#f6efe6;color:#8a6b56;font-weight:700;border-radius:12px;z-index:2}
+.slide-debug{position:absolute;left:8px;bottom:8px;padding:6px 8px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;border-radius:8px;z-index:3;max-width:calc(100% - 16px);white-space:pre-wrap;opacity:0.95}
+.hero-text { text-align:center; width:100%; }
+.hero-text p { max-width: 420px; margin: 8px auto 0; }
+.about-block { max-width:420px; margin:0 auto; text-align:left; }
+.about-image { width:100%; margin-bottom:8px; }
+.about-image img { width:100%; height:160px; object-fit:cover; border-radius:8px; display:block; transition:opacity 600ms ease; opacity:1; }
+.about-image img.fading{opacity:0}
+.about-image .img-placeholder { width:100%; height:160px; display:flex; align-items:center; justify-content:center; background:#f6efe6; color:#8a6b56; font-weight:700; border-radius:8px; }
+.about-image.noimg img { display:none; }
+.about-text { font-size:14px; color:#444; margin:0; }
+
+/* header logo */
+.header-logo { height:1em; width:auto; border-radius:4px; object-fit:cover; margin-right:8px; vertical-align:middle; display:inline-block; }
+.header-logo-wrap{display:inline-block}
+.header-logo-wrap .placeholder{display:none;color:var(--accent);font-size:12px;padding-left:6px}
+.header-logo-wrap.noimg .placeholder{display:inline-block}
+
+/* calendar sticker (positioned in calendar block) */
+.calendar div { position: relative; } 
+
+.menu-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+.menu-item { display:flex; flex-direction:column; align-items:center; gap:8px; padding:12px 0; text-align:center; }
+.menu-item-image img { width:100%; height:140px; object-fit:cover; border-radius:12px; }
+.menu-item-image .img-placeholder { width:100%; height:140px; display:flex; align-items:center; justify-content:center; border-radius:12px; }
+.menu-item-body h3 { font-size:16px; margin:8px 0 4px 0; }
+.menu-item-body p { font-size:13px; color:#666; margin:0; max-width:260px; }
+.price { font-weight:700; color:var(--accent); }
+
+/* simple menu table in index */
+.simple-menu td { padding:6px 8px; border-bottom:1px solid #f0e7dc; }
+
+/* footer layout */
+footer .footer-wrap { display:flex; align-items:center; justify-content:center; gap:8px; font-weight:700; }
+.footer-icon { height:1em; width:auto; object-fit:contain; border-radius:4px; display:inline-block; vertical-align:middle; } 
+
+.btn { background:var(--accent); color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; display:inline-block; border:none; cursor:pointer; font-weight:700; }
+
+@media (max-width:420px) {
+  .hero-inner { flex-direction:column; }
+  .device-frame { width:100%; box-shadow:none; }
+}
+</style>
+</head>
+
+<body>
+<div class="device-frame">
+
+<header>
+  <div class="header-inner">
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="header-logo-wrap">
+      <!-- ユーザー指定のアイコンを相対パスで読み込み -->
+      <img class="header-logo" src="image/アイコン.png" alt="米粉のしふぉん　まつぼっくり" onerror="this.style.display='none'; this.parentElement.classList.add('noimg')">
+      <div class="placeholder">ヘッダーロゴは <code>image/アイコン.png</code> にアップロードしてください</div>
+    </div>
+    <div class="logo">米粉のしふぉん　まつぼっくり</div>
+  </div>
+  <nav id="nav">
+    <ul>
+      <li><a href="#news" onclick="toggleMenu()">お知らせ</a></li>
+      <li><a href="#menu" onclick="toggleMenu()">メニュー</a></li>
+      <li><a href="#calendar" onclick="toggleMenu()">営業日</a></li>
+      <li><a href="#access" onclick="toggleMenu()">アクセス</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="hero-inner card">
+    <div class="hero-image" id="heroImageWrap">
+    <div class="hero-text">
+      <div class="about-block">
+        <div class="about-image" data-images="image/image5.jpeg,image/image2.jpeg,image/image6.jpeg">
+          <img id="aboutImg" src="image/image5.jpeg" alt="雪ほたかの米粉を使ったシフォン">
+          <div class="img-placeholder">画像を <code>image/</code> にアップロードしてください</div>
+        </div>
+        <p id="aboutText">雪ほたかの米粉100%を使用したグルテンフリーのシフォンケーキ専門店。国産米中心の飼料で育った鶏の卵を使い、保存料や着色料は不使用。お子様から大人まで安心して楽しめます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <h2 class="section-title">最新のお知らせ</h2>
+  <div class="card" id="latestNews">
+    <!-- JS で data/news.json の最新を表示 -->
+  </div>
+  <div style="text-align:right; margin-top:6px;"><a href="news.html" class="btn" style="background:#fff;color:var(--text);border:1px solid #eee;">お知らせ一覧へ</a></div>
+</section> 
+
+<section id="menu">
+  <h2 class="section-title">メニュー</h2>
+  <div class="card">
+    <div class="menu-grid" id="menuGrid">
+      <!-- JS でメニューを読み込み可能（画像は image/ に配置） -->
+      <div class="menu-item">
+        <div class="menu-item-image"><img src="image/image3.jpeg" alt="プレーン" onerror="this.style.display='none'; this.closest('.menu-item-image').classList.add('noimg');"></div>
+        <div class="menu-item-body"><h3>プレーン</h3></div>
+        <div class="price">¥280</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-image"><img src="image/image3.jpeg" alt="紅茶" onerror="this.style.display='none'; this.closest('.menu-item-image').classList.add('noimg');"></div>
+        <div class="menu-item-body"><h3>紅茶</h3></div>
+        <div class="price">¥320</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-image"><img src="image/image3.jpeg" alt="抹茶" onerror="this.style.display='none'; this.closest('.menu-item-image').classList.add('noimg');"></div>
+        <div class="menu-item-body"><h3>抹茶</h3></div>
+        <div class="price">¥350</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-image"><img src="image/image3.jpeg" alt="チョコ" onerror="this.style.display='none'; this.closest('.menu-item-image').classList.add('noimg');"></div>
+        <div class="menu-item-body"><h3>チョコ</h3></div>
+        <div class="price">¥350</div>
+      </div>
+
+    </div>
+    <div style="margin-top:12px;">
+      <table class="simple-menu" style="width:100%; font-size:14px; border-collapse:collapse;">
+        <tbody>
+          <tr><td>プレーンしふぉん</td><td style="text-align:right">¥200</td></tr>
+          <tr><td>生シフォン</td><td style="text-align:right">¥400</td></tr>
+          <tr><td>フォンダンショコラ</td><td style="text-align:right">¥250</td></tr>
+          <tr><td>プリン</td><td style="text-align:right">¥200</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:#666;margin-top:6px;">※価格はすべて税込みです。</p>
+    </div>
+  </div>
+</section>
+
+<section id="calendar">
+  <h2 class="section-title">営業日</h2>
+  <div class="card">
+    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; margin-bottom:8px;">
+      <div id="calTitle" style="font-weight:700; color:var(--text);"></div>
+      <div id="calHours" style="font-size:13px;color:#666;margin-top:4px;">11:00-18:00（売切次第終了）</div>
+    </div>
+    <div id="calendarGrid" class="calendar">
+      <!-- カレンダーはここに描画されます -->
+    </div>
+    <div style="margin-top:8px; font-size:12px; color:#666;"><strong>表示の説明：</strong><span style="display:inline-block; padding:4px 8px; background:#ffe0e0; border-radius:4px; margin-left:8px;">定休日</span></div> 
+  </div>
+</section>
+
+<section id="access">
+  <h2 class="section-title">アクセス</h2>
+  <div class="card">
+    <p id="shopAddress">群馬県藤岡市中島290-1</p>
+    <iframe
+      id="mapFrame"
+      src="https://www.google.com/maps?q=群馬県藤岡市中島290-1&output=embed"
+      width="100%" height="220" style="border:0;" loading="lazy"></iframe>
+    <noscript><p style="font-size:13px;color:#666;margin-top:8px;"><a href="https://www.google.com/maps?q=群馬県藤岡市中島290-1" target="_blank" rel="noopener">地図を別タブで開く（iframe無効時の代替）</a></p></noscript>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-wrap">
+    <img class="footer-icon" src="image/logo.png" alt="店アイコン" onerror="this.style.display='none'">
+    <div>米粉のしふぉん　まつぼっくり</div>
+  </div>
+  <div style="margin-top:8px; text-align:center;">
+    <a href="https://instagram.com/your_handle" target="_blank" rel="noopener noreferrer" style="color:#fff; text-decoration:none;">Instagram</a>
+  </div>
+  <div style="margin-top:8px; text-align:center; font-size:12px; color:#f5efe9; opacity:0.95;">© 2025 米粉のしふぉん　まつぼっくり — ページ内の文章・写真の無断転載を禁じます。</div>
+</footer>
+
+</div>
+
+<script>
+// toggleMenu already present earlier
+function toggleMenu() {
+  const nav = document.getElementById("nav");
+  nav.style.display = nav.style.display === "block" ? "none" : "block";
+}
+
+// --- Shop data loader ---
+async function loadShopData() {
+  try {
+    const res = await fetch('data/shop.json');
+    const shop = await res.json();
+    const nameEl = document.getElementById('shopName'); if (nameEl) nameEl.textContent = shop.name;
+    const descEl = document.getElementById('shopDesc'); if (descEl) descEl.textContent = shop.description;
+    const hoursEl = document.getElementById('shopHours'); if (hoursEl) hoursEl.textContent = shop.openingHours;
+    const notesEl = document.getElementById('shopNotes'); if (notesEl) notesEl.textContent = shop.notes || '';
+    const addrEl = document.getElementById('shopAddress'); if (addrEl) addrEl.textContent = shop.address;
+    const holidayEl = document.getElementById('holidayText'); if (holidayEl) holidayEl.textContent = shop.holidays.join('・');
+    const calHoursEl = document.getElementById('calHours'); if (calHoursEl) calHoursEl.textContent = (shop.openingHours? `${shop.openingHours}（売切次第終了）` : '11:00-18:00（売切次第終了）');
+
+    // Set JSON-LD for local business
+    const ld = {
+      "@context":"https://schema.org",
+      "@type":"FoodEstablishment",
+      "name": shop.name,
+      "description": shop.description,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": shop.address
+      },
+      "openingHours": shop.openingHours
+    };
+    const script = document.createElement('script'); script.type='application/ld+json'; script.text = JSON.stringify(ld);
+    document.head.appendChild(script);
+
+  } catch (e) {
+    console.warn('shop.json の読み込みに失敗しました', e);
+  }
+}
+
+// --- News loader ---
+async function loadNews() {
+  try {
+    const r = await fetch('data/news.json');
+    if (!r.ok) throw new Error('no-file');
+    const arr = await r.json();
+    const el = document.getElementById('latestNews');
+    if (!Array.isArray(arr) || arr.length===0) { el.innerHTML = '<p>お知らせはありません</p>'; return; }
+    const latest = arr[0];
+    el.innerHTML = `<p style="font-weight:700">${latest.date}</p><p>${latest.text}</p>`;
+  } catch (e) {
+    console.warn('news.json の読み込み失敗', e);
+    const el = document.getElementById('latestNews'); if (el) el.innerHTML = '<p>お知らせの読み込みに失敗しました</p>';
+  }
+}
+
+// --- Calendar: fetch per month if available, fallback to closedDaysOfWeek ---
+async function fetchCalendarData(year, month) {
+  // month is 1-based here
+  const path = `calendar/${year}-${String(month).padStart(2,'0')}.json`;
+  try {
+    const r = await fetch(path);
+    if (!r.ok) throw new Error('no-file');
+    const data = await r.json();
+    return data;
+  } catch (e) {
+    // fallback
+    return { year, month, closedDaysOfWeek: [1,2], notes: {} };
+  }
+}
+
+function buildCalendar(container, data) {
+  container.innerHTML = '';
+  // header row
+  const days = ['日','月','火','水','木','金','土'];
+  for (let d of days) {
+    const el = document.createElement('div'); el.textContent = d; el.style.fontWeight='700'; container.appendChild(el);
+  }
+  const first = new Date(data.year, data.month-1, 1);
+  const last = new Date(data.year, data.month, 0);
+  const start = first.getDay();
+  // blank cells
+  for (let i=0;i<start;i++) { const e=document.createElement('div'); container.appendChild(e); }
+  for (let d=1; d<=last.getDate(); d++) {
+    const date = new Date(data.year, data.month-1, d);
+    const cell = document.createElement('div');
+    const dateSpan = document.createElement('span'); dateSpan.className='date-num'; dateSpan.textContent = d; cell.appendChild(dateSpan);
+    const key = `${data.year}-${String(data.month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const labels = [];
+    if (data.closedDaysOfWeek.includes(date.getDay())) {
+      cell.classList.add('closed');
+      labels.push('定休日');
+    }
+
+    // highlight today
+    const today = new Date();
+    if (date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
+      cell.classList.add('today');
+      labels.push('本日');
+    }
+    if (data.notes && data.notes[key]) {
+      labels.push(data.notes[key]);
+    }
+    if (labels.length) cell.title = labels.join(' / ');
+    // click to show note
+    cell.addEventListener('click', ()=>{
+      if (cell.title) alert(`${data.year}年${data.month}月${d}日\n${cell.title}`);
+    });
+    container.appendChild(cell);
+  }
+}
+
+// --- Slideshow initializer ---
+function initSlideshow(){
+  const slides = Array.from(document.querySelectorAll('#slides .slide'));
+  const placeholder = document.getElementById('slidesPlaceholder');
+  // ensure debug element
+  const debugEl = (function(){
+    let d = document.getElementById('slideDebug');
+    if(!d){ d = document.createElement('div'); d.id='slideDebug'; d.className='slide-debug'; d.setAttribute('aria-hidden','true'); const slidesContainer = document.getElementById('slides'); if (slidesContainer) slidesContainer.appendChild(d); }
+    return d;
+  })();
+
+  if (!slides || slides.length===0) {
+    if (placeholder) placeholder.style.display='flex';
+    if (debugEl) debugEl.textContent = 'no slides';
+    return;
+  }
+
+  slides.forEach(s=>{
+    s.classList.remove('active','hidden');
+    s.addEventListener('error', ()=>{ s.dataset.broken = '1'; s.classList.add('hidden'); logStatus(); checkAndFallback(); console.warn('slide error', s.src); });
+    s.addEventListener('load', ()=>{ s.dataset.broken = '0'; s.classList.remove('hidden'); logStatus(); checkAndFallback(); });
+  });
+
+  let idx = 0;
+  let timerId = null;
+
+  function getAvailable(){
+    return slides.filter(s=> !(s.dataset.broken === '1') && !s.classList.contains('hidden') && s.src);
+  }
+
+  function logStatus(){
+    if(!debugEl) return;
+    const rows = slides.map((s,i)=>{
+      return `${i+1}: ${s.src.split('/').pop()} ${s.dataset.broken==='1'?'[BROKEN]':''} ${s.classList.contains('hidden')?'[HIDDEN]':''} ${s.complete? (s.naturalWidth? '[OK]':'[ZERO]') : '[LOADING]' }${s.classList.contains('active')?' [ACTIVE]':''}`;
+    });
+    debugEl.textContent = rows.join('\n');
+  }
+
+  function checkAndFallback(){
+    const avail = getAvailable();
+    logStatus();
+    if (avail.length === 0) {
+      slides.forEach(s=> s.classList.remove('active'));
+      if (placeholder) placeholder.style.display='flex';
+      if (timerId) { clearInterval(timerId); timerId = null; }
+      return;
+    }
+    if (placeholder) placeholder.style.display='none';
+
+    // ensure an active slide
+    if (!slides.some(s=> s.classList.contains('active'))) {
+      avail[0].classList.add('active');
+      idx = slides.indexOf(avail[0]);
+      logStatus();
+    } else {
+      const active = slides.findIndex(s=> s.classList.contains('active'));
+      idx = active >= 0 ? active : slides.indexOf(avail[0]);
+    }
+
+    if (timerId && avail.length <= 1) { clearInterval(timerId); timerId = null; }
+    if (!timerId && avail.length > 1) {
+      timerId = setInterval(()=>{
+        const curAvail = getAvailable();
+        if (curAvail.length <= 1) return;
+        const current = slides[idx];
+        const pos = curAvail.indexOf(current);
+        const nextPos = (pos === -1) ? 0 : (pos + 1) % curAvail.length;
+        const nextSlide = curAvail[nextPos];
+        if (!nextSlide) return;
+        slides[idx] && slides[idx].classList.remove('active');
+        nextSlide.classList.add('active');
+        idx = slides.indexOf(nextSlide);
+        logStatus();
+      }, 5000);
+    }
+  }
+
+  // initial evaluation for cached images
+  slides.forEach(s=>{
+    if (s.complete) {
+      if (s.naturalWidth === 0) { s.dataset.broken='1'; s.classList.add('hidden'); }
+      else { s.dataset.broken='0'; s.classList.remove('hidden'); }
+    }
+  });
+
+  // small forced fallback: if none available after 500ms but there are slides, try showing first non-broken even if not loaded
+  setTimeout(()=>{
+    const avail = getAvailable();
+    if (avail.length === 0) {
+      const candidate = slides.find(s=> s.dataset.broken !== '1');
+      if (candidate) {
+        candidate.classList.remove('hidden');
+        candidate.classList.add('active');
+        idx = slides.indexOf(candidate);
+        if (placeholder) placeholder.style.display='none';
+        logStatus();
+      }
+    }
+  }, 500);
+
+  // run a check after a short delay to let images start loading
+  setTimeout(checkAndFallback, 80);
+}
+
+let currentCal = (new Date());
+async function renderCurrentMonth(offset=0) {
+  const dt = new Date(currentCal.getFullYear(), currentCal.getMonth()+offset, 1);
+  currentCal = dt;
+  const y = dt.getFullYear(), m = dt.getMonth()+1;
+  document.getElementById('calTitle').textContent = `${y}年 ${m}月`;
+  const data = await fetchCalendarData(y,m);
+  buildCalendar(document.getElementById('calendarGrid'), data);
+}
+
+// navigation disabled: only current month is shown (前月/次月ナビは不要のため削除) 
+
+// init
+loadShopData();
+loadNews();
+initSlideshow();
+initAboutSlideshow();
+renderCurrentMonth(0);
+
+// --- About image slideshow (cycles image in `.about-image`) ---
+function initAboutSlideshow(interval = 5000) {
+  const aboutWrap = document.querySelector('.about-image');
+  if (!aboutWrap) return;
+  let placeholder = aboutWrap.querySelector('.img-placeholder');
+  if (!placeholder) {
+    placeholder = document.createElement('div'); placeholder.className='img-placeholder'; placeholder.textContent='画像をアップロードしてください'; aboutWrap.appendChild(placeholder);
+  }
+  let imgEl = aboutWrap.querySelector('#aboutImg');
+
+  // gather images: dataset.images > global ABOUT_IMAGES > slides in hero > existing img src
+  let images = [];
+  if (aboutWrap.dataset.images) images = aboutWrap.dataset.images.split(',').map(s=>s.trim()).filter(Boolean);
+  else if (window.ABOUT_IMAGES && Array.isArray(window.ABOUT_IMAGES)) images = window.ABOUT_IMAGES.slice();
+  else {
+    const slideImgs = Array.from(document.querySelectorAll('#slides .slide')).map(s=>s.src).filter(Boolean);
+    if (slideImgs.length) images = slideImgs;
+    else if (imgEl && imgEl.src) images = [imgEl.src];
+  }
+
+  if (!imgEl) {
+    imgEl = document.createElement('img'); imgEl.id = 'aboutImg'; imgEl.alt = '店の写真'; aboutWrap.insertBefore(imgEl, placeholder);
+  }
+
+  let idx = 0;
+  const broken = {};
+  let timer = null;
+
+  function loadImage(i) {
+    if (!images[i]) return;
+    aboutWrap.classList.remove('noimg');
+    imgEl.classList.add('fading');
+    imgEl.style.display = 'block';
+    imgEl.onload = () => { imgEl.classList.remove('fading'); if (placeholder) placeholder.style.display='none'; };
+    imgEl.onerror = () => { broken[images[i]] = true; imgEl.style.display='none'; if (placeholder) placeholder.style.display='flex'; nextImage(); };
+    imgEl.src = images[i];
+  }
+
+  function nextImage() {
+    if (images.length === 0) return;
+    for (let i=1;i<=images.length;i++){
+      const j = (idx + i) % images.length;
+      if (!broken[images[j]]) { idx = j; loadImage(idx); return; }
+    }
+    // all broken
+    if (placeholder) { imgEl.style.display='none'; aboutWrap.classList.add('noimg'); placeholder.style.display='flex'; }
+  }
+
+  // initial display
+  if (images.length === 0) { if (placeholder) placeholder.style.display='flex'; return; }
+  loadImage(0);
+
+  if (images.length > 1) {
+    timer = setInterval(()=>{ idx = (idx + 1) % images.length; loadImage(idx); }, interval);
+  }
+}
+</script>
+
+</body>
+</html>

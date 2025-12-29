@@ -1,0 +1,6 @@
+[
+  { "name": "プレーンしふぉん", "description": "シンプルで優しい定番。", "price": 200, "image": "image/plain.jpg" },
+  { "name": "生シフォン", "description": "しっとりとした食感の人気商品。", "price": 400, "image": "image/raw.jpg" },
+  { "name": "フォンダンショコラ", "description": "温めるととろける濃厚チョコレート。", "price": 250, "image": "image/fondant.jpg" },
+  { "name": "プリン", "description": "昔ながらの素朴な味わい。", "price": 200, "image": "image/pudding.jpg" }
+]
