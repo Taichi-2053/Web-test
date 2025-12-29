@@ -136,7 +136,8 @@ section {
 .hero {
   background: var(--sub);
   text-align: center;
-  padding: 52px 16px;
+  /* 余白を3分の1に縮小 */
+  padding: 18px 16px;
 }
 
 .hero h1 {
@@ -218,9 +219,9 @@ footer {
 ===================== */
 .hero-inner { display:flex; flex-direction:column; gap:12px; align-items:center; }
 .hero-image img { width:100%; height:auto; object-fit:cover; border-radius:12px; }
-.slides{position:relative;width:100%;height:220px;border-radius:12px;overflow:hidden}
-.slides img.slide{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 600ms ease}
-.slides img.slide.active{opacity:1}
+.slides{position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;background:var(--sub)}
+.slides img.slide{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;object-position:center;opacity:0;transition:opacity 800ms ease;z-index:1}
+.slides img.slide.active{opacity:1;z-index:2}
 .slides img.slide.hidden{display:none!important;opacity:0}
 .slides-placeholder{position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:#f6efe6;color:#8a6b56;font-weight:700;border-radius:12px;z-index:2}
 .slide-debug{position:absolute;left:8px;bottom:8px;padding:6px 8px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;border-radius:8px;z-index:3;max-width:calc(100% - 16px);white-space:pre-wrap;opacity:0.95}
@@ -256,7 +257,8 @@ footer {
 
 /* footer layout */
 footer .footer-wrap { display:flex; align-items:center; justify-content:center; gap:8px; font-weight:700; }
-.footer-icon { height:1em; width:auto; object-fit:contain; border-radius:4px; display:inline-block; vertical-align:middle; } 
+.footer-icon { height:1.4em; width:auto; object-fit:contain; border-radius:6px; display:inline-block; vertical-align:middle; transition:transform 180ms ease; }
+.footer-instalink:hover .footer-icon{ transform:translateY(-2px) scale(1.05); } 
 
 .btn { background:var(--accent); color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; display:inline-block; border:none; cursor:pointer; font-weight:700; }
 
@@ -389,11 +391,13 @@ footer .footer-wrap { display:flex; align-items:center; justify-content:center; 
 
 <footer>
   <div class="footer-wrap">
-    <img class="footer-icon" src="image/logo.png" alt="店アイコン" onerror="this.style.display='none'">
+    <a href="https://instagram.com/your_handle" target="_blank" rel="noopener noreferrer" class="footer-instalink" aria-label="Instagram">
+      <img class="footer-icon" src="image/instagram.png" alt="Instagram" onerror="this.onerror=null; this.src='image/logo.png';">
+    </a>
     <div>米粉のしふぉん　まつぼっくり</div>
   </div>
   <div style="margin-top:8px; text-align:center;">
-    <a href="https://instagram.com/your_handle" target="_blank" rel="noopener noreferrer" style="color:#fff; text-decoration:none;">Instagram</a>
+    <a href="https://instagram.com/your_handle" target="_blank" rel="noopener noreferrer" style="color:#fff; text-decoration:none;">@your_handle</a>
   </div>
   <div style="margin-top:8px; text-align:center; font-size:12px; color:#f5efe9; opacity:0.95;">© 2025 米粉のしふぉん　まつぼっくり — ページ内の文章・写真の無断転載を禁じます。</div>
 </footer>
