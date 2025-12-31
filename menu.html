@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <title>メニュー一覧 - 米粉のしふぉん　まつぼっくり</title>
-<style>body{font-family:'Noto Sans JP',sans-serif;padding:20px;background:#fffaf6;color:#3a2e2a} table{width:100%;border-collapse:collapse} th,td{padding:8px;border-bottom:1px solid #eee;text-align:left} img{width:64px;height:64px;object-fit:cover;border-radius:8px} a{color:#3a2e2a;text-decoration:none}</style>
+<link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="menu-page-body">
   <a href="index.html">← トップへ戻る</a>
   <h1>メニュー一覧（編集は <code>data/menu.json</code> を更新してください）</h1>
   <table id="menuTable"><thead><tr><th>写真</th><th>商品名</th><th>説明</th><th>価格</th></tr></thead><tbody>読み込み中...</tbody></table>
@@ -19,7 +19,7 @@
     const arr = await r.json();
     const body = document.querySelector('#menuTable tbody');
     if (!arr || arr.length===0){ body.innerHTML='<tr><td colspan="4">メニューはありません</td></tr>'; return; }
-    body.innerHTML = arr.map(i=>`<tr><td><img src="${i.image}" alt="${i.name}" onerror="this.style.display='none'"></td><td>${i.name}</td><td>${i.description}</td><td>¥${i.price}</td></tr>`).join('');
+    body.innerHTML = arr.map(i=>`<tr><td><img class="page-small-img" src="${i.image}" alt="${i.name}" onerror="this.style.display='none'"></td><td>${i.name}</td><td>${i.description}</td><td>¥${i.price}</td></tr>`).join('');
   }catch(e){ document.querySelector('#menuTable tbody').innerHTML='<tr><td colspan="4">読み込みに失敗しました</td></tr>'; }
 })();
 </script>

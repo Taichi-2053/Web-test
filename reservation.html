@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<title>予約について - 米粉のしふぉん　まつぼっくり</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="device-frame">
+
+<header>
+  <div class="header-inner">
+    <div class="hamburger" onclick="toggleMenu()" aria-expanded="false" role="button" tabindex="0">☰</div>
+    <div class="header-logo-wrap">
+      <img class="header-logo" src="image/アイコン.png" alt="米粉のしふぉん　まつぼっくり" onerror="this.style.display='none'; this.parentElement.classList.add('noimg')">
+    </div>
+    <div class="logo">米粉のしふぉん　まつぼっくり</div>
+  </div>
+  <nav id="nav">
+    <ul>
+      <li><a href="index.html" onclick="toggleMenu()">トップ</a></li>
+      <li><a href="about.html" onclick="toggleMenu()">お店のこだわり</a></li>
+      <li><a href="reservation.html" onclick="toggleMenu()">予約について</a></li>
+      <li><a href="parking.html" onclick="toggleMenu()">駐車場について</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section>
+    <h2 class="section-title">予約について</h2>
+    <div class="card">
+      <p id="reservationIntro">当店は一部商品で予約販売を承っています。ご希望の商品と受取日時をお知らせください。予約は店頭・お電話・InstagramのDMで承ります。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <h2>お問い合わせ</h2>
+      <p>電話: 店舗にてご案内（営業時間内）</p>
+      <p>Instagram: <a href="https://www.instagram.com/matsubokkuri_2024/" target="_blank" rel="noopener">@matsubokkuri_2024</a></p>
+      <p class="note" style="margin-top:8px; color:#666;">※ 予約方法やキャンセルポリシーに関しては、ここに詳しく追記してください。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-wrap">
+    <a href="https://www.instagram.com/matsubokkuri_2024/" target="_blank" rel="noopener noreferrer" class="footer-instalink" aria-label="Instagram">
+      <img class="footer-icon" src="image/instagram.png" alt="Instagram" onerror="this.onerror=null; this.src='image/logo.png';">
+    </a>
+    <div>@matsubokkuri_2024</div>
+  </div>
+  <div style="margin-top:8px; text-align:center; color:#fff;">(アイコンをクリックするとInstagramへ移動します)</div>
+  <div style="margin-top:8px; text-align:center; font-size:12px; color:#f5efe9; opacity:0.95;">© 2025 米粉のしふぉん　まつぼっくり — ページ内の文章・写真の無断転載を禁じます。</div>
+</footer>
+
+</div>
+
+<script>
+function toggleMenu(){ const nav=document.getElementById('nav'); const hb=document.querySelector('.hamburger'); if(!nav) return; const isOpen=nav.classList.toggle('open'); if(hb) hb.setAttribute('aria-expanded', isOpen? 'true' : 'false'); }
+document.addEventListener('keydown',(e)=>{ const hb=document.querySelector('.hamburger'); if(!hb) return; if(document.activeElement===hb && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); toggleMenu(); }});
+async function loadShopData(){ try{ const res = await fetch('data/shop.json'); const shop = await res.json(); const headerAddrEl = document.getElementById('headerAddress'); if(headerAddrEl) headerAddrEl.textContent = shop.address.replace(/^〒\d{3}-\d{4}\s*/,''); const headerInfoEl = document.getElementById('headerInfo'); if(headerInfoEl) headerInfoEl.innerHTML = `定休日　${(shop.holidays||[]).join('・')}<br>OPEN　${(shop.openingHours||'11:00-18:00').replace('-','　CLOSE　')}（売切次第終了）`; const footerAddrEl = document.getElementById('footerAddress'); if(footerAddrEl) footerAddrEl.textContent = shop.address.replace(/^〒\d{3}-\d{4}\s*/,''); const footerInfoEl = document.getElementById('footerInfo'); if(footerInfoEl) footerInfoEl.textContent = `定休日　${(shop.holidays||[]).join('・')}　OPEN　${(shop.openingHours||'11:00-18:00').replace('-','　CLOSE　')}（売切次第終了）`; }catch(e){ console.warn('shop.json読み込み失敗',e); }}
+loadShopData();
+</script>
+</body>
+</html> 
