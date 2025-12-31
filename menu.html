@@ -3,23 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
-<title>メニュー一覧 - 米粉のしふぉん　まつぼっくり</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<title>メニュー - 米粉のしふぉん　まつぼっくり</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="menu-page-body">
-  <a href="index.html">← トップへ戻る</a>
-  <h1>メニュー一覧（編集は <code>data/menu.json</code> を更新してください）</h1>
-  <table id="menuTable"><thead><tr><th>写真</th><th>商品名</th><th>説明</th><th>価格</th></tr></thead><tbody>読み込み中...</tbody></table>
+<body>
+<div class="device-frame">
+
+<header>
+  <div class="header-inner">
+    <div class="hamburger" onclick="toggleMenu()" aria-expanded="false" role="button" tabindex="0">☰</div>
+    <div class="header-logo-wrap">
+      <img class="header-logo" src="image/アイコン.png" alt="米粉のしふぉん　まつぼっくり" onerror="this.style.display='none'; this.parentElement.classList.add('noimg')">
+    </div>
+    <div class="logo">米粉のしふぉん　まつぼっくり</div>
+  </div>
+  <nav id="nav">
+    <ul>
+      <li><a href="index.html" onclick="toggleMenu()">トップ</a></li>
+      <li><a href="about.html" onclick="toggleMenu()">お店のこだわり</a></li>
+      <li><a href="menu.html" onclick="toggleMenu()">メニュー</a></li>
+      <li><a href="reservation.html" onclick="toggleMenu()">予約について</a></li>
+      <li><a href="parking.html" onclick="toggleMenu()">駐車場について</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section>
+    <h2 class="section-title">メニュー</h2>
+    <div class="card">
+      <p>以下は現在の取り扱い商品です（編集は <code>data/menu.json</code> を更新してください）。</p>
+      <div style="overflow:auto; margin-top:10px;">
+        <table id="menuTable" style="width:100%; border-collapse:collapse;"><thead><tr style="text-align:left; border-bottom:1px solid #eee;"><th style="padding:8px">写真</th><th style="padding:8px">商品名</th><th style="padding:8px">説明</th><th style="padding:8px; text-align:right">価格</th></tr></thead><tbody>読み込み中...</tbody></table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-wrap">
+    <a href="https://www.instagram.com/matsubokkuri_2024/" target="_blank" rel="noopener noreferrer" class="footer-instalink" aria-label="Instagram">
+      <img class="footer-icon" src="image/instagram.png" alt="Instagram" onerror="this.onerror=null; this.src='image/logo.png';">
+    </a>
+    <div>@matsubokkuri_2024</div>
+  </div>
+  <div style="margin-top:8px; text-align:center; color:#fff;">(アイコンをクリックするとInstagramへ移動します)</div>
+  <div style="margin-top:8px; text-align:center; font-size:12px; color:#f5efe9; opacity:0.95;">© 2025 米粉のしふぉん　まつぼっくり — ページ内の文章・写真の無断転載を禁じます。</div>
+</footer>
+
+</div>
 
 <script>
+function toggleMenu(){ const nav=document.getElementById('nav'); const hb=document.querySelector('.hamburger'); if(!nav) return; const isOpen=nav.classList.toggle('open'); if(hb) hb.setAttribute('aria-expanded', isOpen? 'true' : 'false'); }
+// keyboard support for hamburger
+document.addEventListener('keydown',(e)=>{ const hb=document.querySelector('.hamburger'); if(!hb) return; if(document.activeElement===hb && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); toggleMenu(); }});
+
 (async ()=>{
   try{
     const r = await fetch('data/menu.json');
     const arr = await r.json();
     const body = document.querySelector('#menuTable tbody');
     if (!arr || arr.length===0){ body.innerHTML='<tr><td colspan="4">メニューはありません</td></tr>'; return; }
-    body.innerHTML = arr.map(i=>`<tr><td><img class="page-small-img" src="${i.image}" alt="${i.name}" onerror="this.style.display='none'"></td><td>${i.name}</td><td>${i.description}</td><td>¥${i.price}</td></tr>`).join('');
+    body.innerHTML = arr.map(i=>`<tr><td style="padding:8px"><img class="page-small-img" src="${i.image}" alt="${i.name}" onerror="this.style.display='none'"></td><td style="padding:8px">${i.name}</td><td style="padding:8px">${i.description}</td><td style="padding:8px; text-align:right">¥${i.price}</td></tr>`).join('');
   }catch(e){ document.querySelector('#menuTable tbody').innerHTML='<tr><td colspan="4">読み込みに失敗しました</td></tr>'; }
 })();
 </script>

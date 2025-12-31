@@ -69,7 +69,11 @@
 
 - 駐車場について (parking.html)
   - 新規ページ `parking.html` を作成しました。駐車場の台数・位置・注意点などはこのファイルの本文を編集して更新してください。地図は Google Maps の埋め込みを利用しています（`iframe`）。
-  - ナビゲーションにリンクを追加済み（`index.html` / `about.html` / `reservation.html`）。
+  - ナビゲーションにリンクを追加済み（`index.html` / `about.html` / `reservation.html` / `parking.html`）。
+
+- メニュー (menu.html)
+  - 新規ページ `menu.html` をリッチな一覧ページとして整備しました。メニュー一覧は `data/menu.json` を編集することで更新されます。
+  - ナビゲーションにリンクを追加済み（`index.html` / `about.html` / `reservation.html` / `parking.html`）。
 
 5) データファイルの編集
 - 共通: JSON は必ず UTF-8 で保存してください。編集後はJSONの構文チェック（末尾のカンマなど）を忘れずに。
